@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import Controller from '../../utils/Controller';
 import { UserService } from '../../services/User/UserService';
 import { IUser } from '../../models/User/IUser';
+import AuthService from '../../services/Auth/AuthService';
 
 module.exports = (app: express.Express) => {
     UserController.init(app, UserController);
@@ -11,11 +12,11 @@ class UserController extends Controller {
 
     private constructor(app: express.Express) {
         super();
-        app.get('/users', this.getUsers);
-        app.get('/user/:userId', this.getUser);
-        app.post('/user', this.postUser);
-        app.delete('/user/:userId', this.deleteUser);
-        app.put('/user', this.putUser);
+        app.get('/users', (req, res, next) => AuthService.authenticateToken(req, res, next) ,this.getUsers);
+        app.get('/user/:userId', (req, res, next) => AuthService.authenticateToken(req, res, next) ,this.getUser);
+        app.post('/user', (req, res, next) => AuthService.authenticateToken(req, res, next) ,this.postUser);
+        app.delete('/user/:userId', (req, res, next) => AuthService.authenticateToken(req, res, next) ,this.deleteUser);
+        app.put('/user', (req, res, next) => AuthService.authenticateToken(req, res, next) ,this.putUser);
     }
 
     getUsers(req: Request, res: Response) {
