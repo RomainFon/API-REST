@@ -46,8 +46,12 @@ export class UserService {
     public static deleteUser(id: string): Promise<string> {
         return new Promise((resolve: any, reject: any) => {
             User.deleteOne({ _id: id })
-                .then(() => {
-                    resolve('Deleted');
+                .then((res) => {
+                    if(res.deletedCount) {
+                        resolve('Deleted');
+                    }else{
+                        reject("Error: Id not found");
+                    }
                 })
                 .catch((error) => {
                     reject(error);
@@ -58,8 +62,12 @@ export class UserService {
     public static putUser(user: IUser): Promise<string> {
         return new Promise((resolve: any, reject: any) => {
             User.updateOne({ _id: user._id }, user)
-                .then(() => {
-                    resolve("Modified");
+                .then((res) => {
+                    if(res.nModified) {
+                        resolve("Modified");
+                    }else{
+                        reject("Error: Id not found");
+                    }
                 })
                 .catch((error) => {
                     reject(error);

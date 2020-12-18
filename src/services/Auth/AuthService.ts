@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import env from '../../config/env';
 
 const jwt = require("jsonwebtoken");
+const { readFile } = require('fs').promises;
 
 export default class AuthService {
 
